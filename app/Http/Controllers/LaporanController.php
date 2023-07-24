@@ -7,9 +7,16 @@ use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
 {
-    public function getAllQuery($tgl1, $tgl2, $kategori, $orchad = null)
+    public function getAllQuery($tgl1, $tgl2, $kategori = null, $orchad = null)
     {
-        if (empty($orchad)) {
+        if (empty($kategori)) {
+            $query = DB::select("SELECT a.*, SUM(a.jumlah) as jlh, SUM(a.total) as total, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
+            LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
+            LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
+            LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
+            WHERE a.tanggal BETWEEN '$tgl1' AND '$tgl2' AND a.void = 0
+            GROUP BY a.id_produk");
+        } elseif (empty($orchad)) {
             $query = DB::select("SELECT a.*, SUM(a.jumlah) as jlh, SUM(a.total) as total, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
             LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
             LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
@@ -33,23 +40,19 @@ class LaporanController extends Controller
         $tgl2 = $r->tgl2 ?? date('Y-m-t');
 
         $jenis = $r->jenis;
+        if (empty($jenis)) {
+            $all = $this->getAllQuery($tgl1, $tgl2);
+        }
         if ($jenis == 'tkm') {
             $all = $this->getAllQuery($tgl1, $tgl2, 'TAKEMORI');
         } elseif ($jenis == 'sdb') {
             $all = $this->getAllQuery($tgl1, $tgl2, 'SOONDOBU');
-        }else {
+        } else {
             $takemori = $this->getAllQuery($tgl1, $tgl2, 'TAKEMORI', $jenis);
             $soondobu = $this->getAllQuery($tgl1, $tgl2, 'SOONDOBU', $jenis);
         }
-        if(empty($jenis)) {
-            $all = DB::select("SELECT a.*, SUM(a.jumlah) as jlh, SUM(a.total) as total, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
-            LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
-            LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
-            LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
-            WHERE a.tanggal BETWEEN '$tgl1' AND '$tgl2' AND a.void = 0
-            GROUP BY a.id_produk");
-        }
-        
+
+
         $data = [
             'title' => "Laporan Penjualan",
             'all' => $all ?? '',
