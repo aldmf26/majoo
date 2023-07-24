@@ -34,18 +34,23 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link {{ $jenis == 'tkm' ? 'active' : '' }}" id="tkmr-tab"
-                                            href="<?= route('laporan', ['jenis' => 'tkm']) ?>" role="tab"
-                                            aria-controls="tkmr" aria-selected="false">Takemori</a>
+                                            href="<?= route('laporan', ['jenis' => 'tkm', 'tgl1' => $tgl1, 'tgl2' => $tgl2]) ?>"
+                                            role="tab" aria-controls="tkmr" aria-selected="false">Takemori</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link {{ $jenis == 'sdb' ? 'active' : '' }}" id="sdb-tab"
-                                            href="<?= route('laporan', ['jenis' => 'sdb']) ?>" role="tab"
-                                            aria-controls="sdb" aria-selected="false">Soondobu</a>
+                                            href="<?= route('laporan', ['jenis' => 'sdb', 'tgl1' => $tgl1, 'tgl2' => $tgl2]) ?>"
+                                            role="tab" aria-controls="sdb" aria-selected="false">Soondobu</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link {{ $jenis == 'orc' ? 'active' : '' }}" id="orc-tab"
-                                            href="<?= route('laporan', ['jenis' => 'orc']) ?>" role="tab"
-                                            aria-controls="sdb" aria-selected="false">Orchard</a>
+                                        <a class="nav-link {{ $jenis == '6' ? 'active' : '' }}" id="6-tab"
+                                            href="<?= route('laporan', ['jenis' => '6', 'tgl1' => $tgl1, 'tgl2' => $tgl2]) ?>"
+                                            role="tab" aria-controls="sdb" aria-selected="false">Orchard</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ $jenis == '11' ? 'active' : '' }}" id="11-tab"
+                                            href="<?= route('laporan', ['jenis' => '11', 'tgl1' => $tgl1, 'tgl2' => $tgl2]) ?>"
+                                            role="tab" aria-controls="sdb" aria-selected="false">Upperclass Birdnest</a>
                                     </li>
                                 </ul>
 
@@ -57,8 +62,9 @@
                                     <div class="tab-pane fade show active" id="all" role="tabpanel"
                                         aria-labelledby="all-tab">
 
-                                        @if ($jenis == 'orc')
-                                            <h5><strong>Laporan Orchard <?= $tgl1 ?> - <?= $tgl2 ?></strong> (Dijual di
+                                        @if ($jenis == '6' || $jenis == '11')
+                                            <h5><strong>Laporan {{ $jenis == '6' ? 'Orchad' : 'Upperclass Birdnest' }}
+                                                    <?= $tgl1 ?> - <?= $tgl2 ?></strong> (Dijual di
                                                 Takemori)</h5>
                                             <table class="table">
                                                 <thead>
@@ -96,7 +102,8 @@
                                                 </tfoot>
                                             </table>
                                             <br>
-                                            <h5><strong>Laporan Orchard <?= $tgl1 ?> - <?= $tgl2 ?></strong> (Dijual di
+                                            <h5><strong>Laporan {{ $jenis == '6' ? 'Orchad' : 'Upperclass Birdnest' }}
+                                                    <?= $tgl1 ?> - <?= $tgl2 ?></strong> (Dijual di
                                                 Soondobu)</h5>
                                             <table class="table">
                                                 <thead>
