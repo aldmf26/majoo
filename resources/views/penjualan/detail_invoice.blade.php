@@ -81,6 +81,7 @@
 
                                     <input type="hidden" name="id_invoice" value="<?= $invoice->id ?>">
                                     <input type="hidden" name="no_nota" value="<?= $invoice->no_nota ?>">
+                                    <input type="hidden" name="tgl_nota" value="<?= $invoice->tgl_jam ?>">
                                     @php
                                         $invCash = DB::table('pembayaran')
                                             ->where([['no_nota', request()->get('invoice')], ['id_akun_pembayaran', 13]])

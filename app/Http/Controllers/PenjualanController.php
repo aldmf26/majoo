@@ -42,7 +42,20 @@ class PenjualanController extends Controller
 
     public function edit_pembayaran(Request $r)
     {
-        dd($r->all());
+        DB::table('pembayaran')->where('no_nota', $r->no_nota)->delete();
+        for ($i = 0; $i < count($r->pembayaran); $i++) {
+            if ($r->pembayaran[$i] > 0) {
+                DB::table('pembayaran')->insert([
+                    'id_akun_pembayaran' => $r->id_akun[$i],
+                    'no_nota' => $r->no_nota,
+                    'nominal' => $r->pembayaran[$i],
+                    'pengirim' => $r->pengirim[$i],
+                    'tgl' => $r->tgl_nota,
+                ]);
+            }
+        }
+
+        return redirect()->route('detail_invoice', ['invoice' => $r->no_nota])->with('sukses', 'Data Berhasil diedit');
     }
 
     public function tabelProduk(Request $r)
