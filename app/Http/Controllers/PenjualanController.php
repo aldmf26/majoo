@@ -21,34 +21,32 @@ class PenjualanController extends Controller
         $agent = new Agent();
         $id_lokasi = Session::get('id_lokasi');
         $id_user = User::where('nama', strtolower(Session::get('nama')))->first();
-        
+
         $data = [
             'title' => 'Penjulan',
             'kategori' => Kategori::all(),
             'produk' => Produk::join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id_kategori')->join('tb_satuan', 'tb_produk.id_satuan', 'tb_satuan.id_satuan')->where('tb_produk.id_lokasi', $id_lokasi)->orderBy('tb_produk.id_produk', 'ASC')->get(),
             'id_lokasi' => $id_lokasi,
         ];
-        
-        if($id_user->role_id != 1) {
-            if($agent->is('Windows')) {
+
+        if ($id_user->role_id != 1) {
+            if ($agent->is('Windows')) {
                 return view('404', $data);
             } else {
                 return view('penjualan.penjualan', $data);
             }
         }
-        
-        return view('penjualan.penjualan', $data);
 
+        return view('penjualan.penjualan', $data);
     }
 
     public function tabelProduk(Request $r)
     {
         $id_lokasi = Session::get('id_lokasi');
-        if ($r->search == null) {         
+        if ($r->search == null) {
             $produk = Produk::join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id_kategori')->join('tb_satuan', 'tb_produk.id_satuan', 'tb_satuan.id_satuan')->where('tb_produk.id_lokasi', $id_lokasi)->orderBy('tb_produk.id_produk', 'ASC')->get();
-            
         } else {
-            $produk = Produk::join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id_kategori')->join('tb_satuan', 'tb_produk.id_satuan', 'tb_satuan.id_satuan')->where('tb_produk.id_lokasi', $id_lokasi)->where('tb_produk.nm_produk', 'LIKE', '%'.$r->search.'%')->orderBy('tb_produk.id_produk', 'ASC')->get();
+            $produk = Produk::join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id_kategori')->join('tb_satuan', 'tb_produk.id_satuan', 'tb_satuan.id_satuan')->where('tb_produk.id_lokasi', $id_lokasi)->where('tb_produk.nm_produk', 'LIKE', '%' . $r->search . '%')->orderBy('tb_produk.id_produk', 'ASC')->get();
         }
 
         $data = [
@@ -61,7 +59,7 @@ class PenjualanController extends Controller
     public function searchProduk(Request $r)
     {
         $id_lokasi = Session::get('id_lokasi');
-        $produk = Produk::join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id_kategori')->join('tb_satuan', 'tb_produk.id_satuan', 'tb_satuan.id_satuan')->where('tb_produk.id_lokasi', $id_lokasi)->where('tb_produk.nm_produk', 'LIKE', '%'.$r->search.'%')->orderBy('tb_produk.id_produk', 'ASC')->get();
+        $produk = Produk::join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id_kategori')->join('tb_satuan', 'tb_produk.id_satuan', 'tb_satuan.id_satuan')->where('tb_produk.id_lokasi', $id_lokasi)->where('tb_produk.nm_produk', 'LIKE', '%' . $r->search . '%')->orderBy('tb_produk.id_produk', 'ASC')->get();
         $data = [
             'title' => 'produk',
             'produk' => $produk,
@@ -100,7 +98,7 @@ class PenjualanController extends Controller
                     $jumlah += $k->qty;
                     echo '<div class="col-sm-12 col-md-12">';
                     foreach ($k->options->nm_karyawan as $key => $nm_karyawan) {
-                        foreach($nm_karyawan as $c) {
+                        foreach ($nm_karyawan as $c) {
                             echo  '<span class="badge badge-secondary">' . $c . '</span> ';
                         }
                     }
@@ -219,7 +217,7 @@ class PenjualanController extends Controller
                         'id_karyawan'   => $id_karyawan,
                         'nm_karyawan'   => [$karyawan],
                         'type'    => 'barang',
-                        
+
                     ],
 
                 );
@@ -266,7 +264,8 @@ class PenjualanController extends Controller
         $data = [
             'title' => 'Payment Order Produk',
             'cart' => Cart::content(),
-            'nota' => DB::select("SELECT count(no_nota) as maxKode FROM tb_invoice where tb_invoice.tgl_jam = '$now' group by tb_invoice.tgl_jam")
+            'nota' => DB::select("SELECT count(no_nota) as maxKode FROM tb_invoice where tb_invoice.tgl_jam = '$now' group by tb_invoice.tgl_jam"),
+            'pembayaran' => DB::table('klasifikasi_pembayaran')->get()
         ];
 
         return view('penjualan.payment', $data);
@@ -309,17 +308,21 @@ class PenjualanController extends Controller
             return redirect()->route('detail_invoice', ['invoice' => $cek_nota->no_nota]);
         } else {
             $total = $r->total;
-            $cash = $r->cash;
-            $mandiri_debit = $r->mandiri_debit;
-            $mandiri_kredit = $r->mandiri_kredit;
-            $bca_kredit = $r->bca_kredit;
-            $bca_debit = $r->bca_debit;
+            $cash = $r->cash ?? 0;
+            $mandiri_debit = $r->mandiri_debit ?? 0;
+            $mandiri_kredit = $r->mandiri_kredit ?? 0;
+            $bca_kredit = $r->bca_kredit ?? 0;
+            $bca_debit = $r->bca_debit ?? 0;
             $no_meja = $r->no_meja;
             $invoice = $r->invoice;
+            $ttlBayarHanyar = 0;
+            foreach ($r->pembayaran as  $d) {
+                $ttlBayarHanyar += $d;
+            }
 
 
-
-            $bayar = $cash + $mandiri_debit + $mandiri_kredit + $bca_debit + $bca_kredit;
+            // $bayar = $cash + $mandiri_debit + $mandiri_kredit + $bca_debit + $bca_kredit;
+            $bayar = $ttlBayarHanyar;
             $cart = Cart::content();
 
 
@@ -339,15 +342,15 @@ class PenjualanController extends Controller
                         $length = count($c->options->nm_karyawan[0]);
                         $number = 1;
                         foreach ($c->options->nm_karyawan as $key => $karyawan) {
-                            foreach($karyawan as $kar) {
+                            foreach ($karyawan as $kar) {
                                 $nm_karyawan .= $kar;
                                 if ($number !== $length) {
                                     $nm_karyawan .= ', ';
                                 }
                                 $number++;
-                            }   
+                            }
                         }
-                        
+
 
                         $d_produk = Produk::where('id_produk', $c->id)->where('id_lokasi', $id_lokasi)->first();
                         $data = [
@@ -367,7 +370,7 @@ class PenjualanController extends Controller
                         ];
                         $dataInsert = Pembelian::create($data);
                         $id_pembelian = $dataInsert->id;
-                        
+
 
 
                         $stok_baru = [
@@ -410,7 +413,19 @@ class PenjualanController extends Controller
                         'invoice' => $invoice,
                         'lokasi' => $lokasi
                     ];
+                    for ($i = 0; $i < count($r->pembayaran); $i++) {
+                        if ($r->pembayaran[$i] != 0) {
+                            DB::table('pembayaran')->insert([
+                                'id_akun_pembayaran' => $r->id_akun[$i],
+                                'no_nota' => $no_nota,
+                                'nominal' => $r->pembayaran[$i],
+                                'pengirim' => $r->pengirim[$i],
+                                'tgl' => date('Y-m-d'),
+                            ]);
+                        }
+                    }
                     DB::table('tb_invoice')->insert($data_invoice);
+
 
                     Cart::destroy();
                     return redirect()->route('detail_invoice', ['invoice' => $no_nota]);
@@ -434,13 +449,18 @@ class PenjualanController extends Controller
         LEFT JOIN tb_invoice as b ON a.no_nota = b.no_nota
         LEFT JOIN tb_produk as c ON a.id_produk = c.id_produk
         WHERE a.no_nota = '$no_nota'");
-            $data = [
-                'title'  => "Nota", 
-                'invoice' => $invoice,
-                'produk' => $produk
-            ];
-        
-            return view('penjualan.nota', $data);
+        $data = [
+            'title'  => "Nota",
+            'invoice' => $invoice,
+            'produk' => $produk,
+            'pembayaran' => DB::table('pembayaran as a')
+                ->join('akun_pembayaran as b', 'a.id_akun_pembayaran', 'b.id_akun_pembayaran')
+                ->join('klasifikasi_pembayaran as c', 'c.id_klasifikasi_pembayaran', 'b.id_klasifikasi')
+                ->where('a.no_nota', $no_nota)
+                ->get()
+        ];
+
+        return view('penjualan.nota', $data);
     }
 
     public function detail_invoice(Request $r)
@@ -458,7 +478,8 @@ class PenjualanController extends Controller
             'title'  => "Detail Invoice",
             'invoice' => $invoice,
             'produk' => $produk,
-            'no_nota' => $no_nota
+            'no_nota' => $no_nota,
+            'pembayaran' => DB::table('klasifikasi_pembayaran')->get()
         ];
 
         return view('penjualan.detail_invoice', $data);

@@ -95,11 +95,8 @@
                                             <div class="form-group row">
                                                 <label for="staticEmail" class="col-md-4 col-form-label">Cash</label>
                                                 <div class="col-md-6">
-                                                    <input type="number" name="pembayaran[]"
-                                                        class="form-control pembayaran" value="0" id="cash">
-                                                    <input type="hidden" name="id_akun[]" value="13">
-                                                    <input type="hidden"
-                                                        name="pengirim[]" value="">
+                                                    <input type="number" name="cash" class="form-control pembayaran"
+                                                        value="0" id="cash">
                                                 </div>
                                             </div>
                                             @foreach ($pembayaran as $d)
@@ -120,25 +117,33 @@
                                                     @endphp
                                                     <div x-show="open">
                                                         @foreach ($bayar as $i => $b)
-                                                            <div class="form-group row">
-                                                                <label for="staticEmail"
-                                                                    class="col-md-4 col-form-label">{{ $b->nm_akun }}</label>
-                                                                <div class="col-md-6">
-                                                                    <input type="hidden" name="id_akun[]"
-                                                                        value="{{ $b->id_akun_pembayaran }}">
-                                                                    <input type="number" name="pembayaran[]"
-                                                                        class="form-control pembayaran"
-                                                                        count="{{ $i }}" value="0"
-                                                                        id="{{ $i }}">
-                                                                    <input
-                                                                        type="{{ $b->id_klasifikasi == 4 ? 'text' : 'hidden' }}"
-                                                                        name="pengirim[]"
-                                                                        class="form-control pembayaran_pengirim"
-                                                                        count="{{ $i }}"
-                                                                        placeholder="nama pengirim"
-                                                                        id="{{ $i }}">
+                                                            @if ($d->id_klasifikasi_pembayaran == 4)
+                                                                <div class="form-group row">
+                                                                    <label for="staticEmail"
+                                                                        class="col-md-4 col-form-label">{{ $b->nm_akun }}</label>
+                                                                    <div class="col-md-3">
+                                                                        <input type="number" name="{{ $b->nm_akun }}"
+                                                                            class="form-control pembayaran" count="{{ $i }}" value="0"
+                                                                            id="{{ $i }}">
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <input type="number" name="{{ $b->nm_akun }}"
+                                                                            class="form-control pembayaran_pengirim" count="{{ $i }}"
+                                                                            placeholder="nama pengirim"
+                                                                            id="{{ $i }}">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            @else
+                                                                <div class="form-group row">
+                                                                    <label for="staticEmail"
+                                                                        class="col-md-4 col-form-label">{{ $b->nm_akun }}</label>
+                                                                    <div class="col-md-6">
+                                                                        <input type="number" name="{{ $b->nm_akun }}"
+                                                                            class="form-control pembayaran" count="{{ $i }}" value="0"
+                                                                            id="{{ $i }}">
+                                                                    </div>
+                                                                </div>
+                                                            @endif
                                                         @endforeach
                                                     </div>
                                                 </div>
@@ -177,16 +182,16 @@
                                             {{-- end pembayaran lama --}}
 
                                             <!-- <div class="form-group row">
-                                                                                            <label for="staticEmail" class="col-md-4 col-form-label">Lokasi</label>
-                                                                                            <div class="col-md-6">
-                                                                                            <select name="lokasi" class="form-control select" required>
-                                                                                                    <option value="" >--Pilih Lokasi--</option>
-                                                                                                    <option value="TAKEMORI">TAKEMORI</option>
-                                                                                                    <option value="SOONDOBU">SOONDOBU</option>
+                                                                <label for="staticEmail" class="col-md-4 col-form-label">Lokasi</label>
+                                                                <div class="col-md-6">
+                                                                <select name="lokasi" class="form-control select" required>
+                                                                        <option value="" >--Pilih Lokasi--</option>
+                                                                        <option value="TAKEMORI">TAKEMORI</option>
+                                                                        <option value="SOONDOBU">SOONDOBU</option>
 
-                                                                                            </select>
-                                                                                            </div>
-                                                                                        </div> -->
+                                                                </select>
+                                                                </div>
+                                                            </div> -->
 
                                             <div class="form-group row">
                                                 <label for="staticEmail" class="col-md-4 col-form-label">No Meja</label>
@@ -251,19 +256,19 @@
                 }
             });
             $('.pembayaran').keyup(function() {
+                var cash = parseInt($("#cash").val());
+                // var mandiri_debit = parseInt($("#mandiri_debit").val());
+                // var mandiri_kredit = parseInt($("#mandiri_kredit").val());
+                // var bca_debit = parseInt($("#bca_debit").val());
+                // var bca_kredit = parseInt($("#bca_kredit").val());
 
-                var totalPembayaran = 0;
-
-                $('.pembayaran').each(function() {
-                    var nilaiInput = parseFloat($(this).val()) || 0;
-                    totalPembayaran += nilaiInput;
-                });
-                console.log(totalPembayaran)
-
+                var bayar = cash + mandiri_debit + mandiri_kredit + bca_kredit + bca_debit;
                 var total = parseInt($("#total").val());
-                if (total <= totalPembayaran) {
+                if (total <= bayar) {
                     $('#btn_bayar').removeAttr('disabled');
+                    // alert('tes')
                 } else {
+                    // alert('tes1')
                     $('#btn_bayar').attr('disabled', 'true');
                 }
             });

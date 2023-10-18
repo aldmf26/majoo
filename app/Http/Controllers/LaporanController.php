@@ -52,7 +52,6 @@ class LaporanController extends Controller
             $soondobu = $this->getAllQuery($tgl1, $tgl2, 'SOONDOBU', $jenis);
         }
 
-
         $data = [
             'title' => "Laporan Penjualan",
             'all' => $all ?? '',

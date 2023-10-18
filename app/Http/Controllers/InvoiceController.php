@@ -30,7 +30,8 @@ class InvoiceController extends Controller
             $data = [
                 'title' => 'Invoice Penjualan',
                 'invoice' => DB::select("SELECT * FROM tb_invoice as a  where a.tgl_jam between '$tgl1' and '$tgl2' and a.lokasi = '$lokasi' and a.status ='0' order by a.id DESC "),
-                'id_lokasi' => $id_lokasi
+                'id_lokasi' => $id_lokasi,
+                'klasifikasi' => DB::table('klasifikasi_pembayaran')->get()
             ];
             // dd($data['produk']);
             return view('invoice.invoice', $data);

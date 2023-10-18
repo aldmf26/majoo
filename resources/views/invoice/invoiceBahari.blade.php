@@ -19,7 +19,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="float-left">Daftar Invoice Penjualan Edisi</h3>
+                            <h3 class="float-left">Daftar Invoice Penjualan</h3>
                             <button data-toggle="modal" data-target="#modal-view"
                                 class="btn btn-sm btn-costume float-right ml-2"><i class="fas fa-eye majoo"></i>
                                 View</button>
