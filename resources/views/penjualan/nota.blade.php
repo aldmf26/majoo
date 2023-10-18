@@ -126,9 +126,7 @@
             <td style="text-align: right;"><?= number_format($invoice->dp, 0) ?></td>
         </tr>
         <?php endif; ?>
-        @php
-            dd($pembayaran);
-        @endphp
+      
         @foreach ($pembayaran as $d)
             <tr class="huruf">
                 <td>{{ $d->nm_klasifikasi }} {{ $d->nm_akun }}</td>
