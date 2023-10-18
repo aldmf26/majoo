@@ -458,11 +458,10 @@ class PenjualanController extends Controller
             'title'  => "Nota",
             'invoice' => $invoice,
             'produk' => $produk,
-            'pembayaran' => DB::table('pembayaran as a')
-                ->join('akun_pembayaran as b', 'a.id_akun_pembayaran', 'b.id_akun_pembayaran')
-                ->join('klasifikasi_pembayaran as c', 'c.id_klasifikasi_pembayaran', 'b.id_klasifikasi')
-                ->where('a.no_nota', $no_nota)
-                ->get()
+            'pembayaran' => DB::select("SELECT * FROM `pembayaran` as a 
+            LEFT JOIN akun_pembayaran as b ON a.id_akun_pembayaran = b.id_akun_pembayaran
+            LEFT JOIN klasifikasi_pembayaran as c ON c.id_klasifikasi_pembayaran = b.id_klasifikasi
+            WHERE a.no_nota = '$no_nota';")
         ];
 
         return view('penjualan.nota', $data);
