@@ -93,6 +93,7 @@
                                             <input type="number" name="pembayaran[]" class="form-control pembayaran"
                                                 value="{{ $invCash->nominal ?? 0 }}" id="cash">
                                             <input type="hidden" name="id_akun[]" value="13">
+                                            <input type="hidden" name="pengirim[]" value="">
                                         </div>
                                     </div>
 
@@ -270,22 +271,43 @@
                 }
             });
             $('.pembayaran').keyup(function() {
-                var cash = parseInt($("#cash").val());
-                var mandiri_kredit = parseInt($("#mandiri_kredit").val());
-                var mandiri_debit = parseInt($("#mandiri_debit").val());
-                var bca_kredit = parseInt($("#bca_kredit").val());
-                var bca_debit = parseInt($("#bca_debit").val());
+
+                var totalPembayaran = 0;
+
+                $('.pembayaran').each(function() {
+                    var nilaiInput = parseFloat($(this).val()) || 0;
+                    totalPembayaran += nilaiInput;
+                });
+                console.log(totalPembayaran)
+
+
                 var total = parseInt($("#total").val());
-                var bayar = mandiri_kredit + mandiri_debit + cash + bca_kredit + bca_debit;
+                var bayar = totalPembayaran;
                 $("#kembalian").val(bayar - total);
                 if (total <= bayar) {
                     $('#edit_pembayaran').removeAttr('disabled');
                 } else {
                     $('#edit_pembayaran').attr('disabled', 'true');
                 }
-
-
+                
             });
+            // $('.pembayaran').keyup(function() {
+            //     var cash = parseInt($("#cash").val());
+            //     var mandiri_kredit = parseInt($("#mandiri_kredit").val());
+            //     var mandiri_debit = parseInt($("#mandiri_debit").val());
+            //     var bca_kredit = parseInt($("#bca_kredit").val());
+            //     var bca_debit = parseInt($("#bca_debit").val());
+            //     var total = parseInt($("#total").val());
+            //     var bayar = mandiri_kredit + mandiri_debit + cash + bca_kredit + bca_debit;
+            //     $("#kembalian").val(bayar - total);
+            //     if (total <= bayar) {
+            //         $('#edit_pembayaran').removeAttr('disabled');
+            //     } else {
+            //         $('#edit_pembayaran').attr('disabled', 'true');
+            //     }
+
+
+            // });
         });
     </script>
 @endsection

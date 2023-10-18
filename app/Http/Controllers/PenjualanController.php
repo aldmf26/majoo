@@ -40,6 +40,11 @@ class PenjualanController extends Controller
         return view('penjualan.penjualan', $data);
     }
 
+    public function edit_pembayaran(Request $r)
+    {
+        dd($r->all());
+    }
+
     public function tabelProduk(Request $r)
     {
         $id_lokasi = Session::get('id_lokasi');
