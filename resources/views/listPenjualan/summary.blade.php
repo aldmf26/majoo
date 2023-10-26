@@ -10,6 +10,7 @@
 
 <center>
 <h3>SUMMARY PENJUALAN PRODUK</h3>
+<h4>{{$lokasi}}</h4>
 <p><?= $sort ?></p>
 </center>
 

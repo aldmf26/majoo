@@ -61,7 +61,8 @@ class listPenjualanController extends Controller
             'tgl2' => $tgl2,
             'penjualan' => $penjualan,
             'void' => 0,
-            'sort' => date('d-M-y', strtotime($tgl1)) . " ~ " . date('d-M-y', strtotime($tgl2))
+            'sort' => date('d-M-y', strtotime($tgl1)) . " ~ " . date('d-M-y', strtotime($tgl2)),
+            'lokasi' => $lokasi
         ];
 
         return view('listPenjualan.summary', $data);
