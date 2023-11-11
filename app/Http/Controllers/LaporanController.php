@@ -86,8 +86,8 @@ class LaporanController extends Controller
         $data = [
             'title' => "Laporan Penjualan",
             'penjualan' => $all,
-            'soondobu' => $soondobu,
-            'takemori' => $takemori,
+            'soondobu' => $soondobu ?? '',
+            'takemori' => $takemori ?? '',
             'tgl1' => $tgl1,
             'tgl2' => $tgl2,
             'jenis' => $jenis,
