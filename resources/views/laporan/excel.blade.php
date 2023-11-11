@@ -123,7 +123,7 @@ header("Content-Disposition: attachment; filename=$file");
             <tr>
                 <td><?= $k->nm_kategori ?></td>
                 <td><?= $k->nm_produk ?></td>
-                <td><?= number_format($k->jumlah, 0) ?></td>
+                <td><?= number_format($k->jlh, 0) ?></td>
                 <td><?= $k->satuan ?></td>
                 <td><?= number_format($k->rt_harga, 0) ?></td>
                 <td><?= number_format($k->total, 0) ?></td>

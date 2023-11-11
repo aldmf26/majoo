@@ -71,52 +71,16 @@ class LaporanController extends Controller
         $lokasi = $r->lokasi;
         $jenis = $r->jenis;
 
+        if (empty($jenis)) {
+            $all = $this->getAllQuery($tgl1, $tgl2);
+        }
         if ($jenis == 'tkm') {
-            $all = DB::select("SELECT a.*, SUM(a.total) as total, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
-            LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
-            LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
-            LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
-            WHERE a.tanggal BETWEEN '$tgl1' AND '$tgl2' AND a.void = 0 AND a.lokasi = 'TAKEMORI' AND b.id_kategori != 6
-            GROUP BY a.id_produk");
-            $jenis = 'tkm';
-            $takemori = '';
-            $soondobu = '';
+            $all = $this->getAllQuery($tgl1, $tgl2, 'TAKEMORI');
         } elseif ($jenis == 'sdb') {
-            $jenis = 'sdb';
-            $takemori = '';
-            $soondobu = '';
-            $all = DB::select("SELECT a.*, SUM(a.total) as total,sum(a.jumlah) as jumlah, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
-            LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
-            LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
-            LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
-            WHERE a.tanggal BETWEEN '$tgl1' AND '$tgl2' AND a.void = 0 AND a.lokasi = 'SOONDOBU' AND b.id_kategori != 6
-            GROUP BY a.id_produk");
-        } elseif ($jenis == 'orc') {
-            $jenis = 'orc';
-            $takemori = DB::select("SELECT a.*, SUM(a.total) as total,sum(a.jumlah) as jumlah, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
-            LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
-            LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
-            LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
-            WHERE a.tanggal BETWEEN '$tgl1' AND '$tgl2' AND a.void = 0 AND a.lokasi = 'TAKEMORI' AND b.id_kategori = 6
-            GROUP BY a.id_produk");
-
-            $soondobu = DB::select("SELECT a.*, SUM(a.total) as total,sum(a.jumlah) as jumlah, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
-            LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
-            LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
-            LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
-            WHERE a.tanggal BETWEEN '$tgl1' AND '$tgl2' AND a.void = 0 AND a.lokasi = 'SOONDOBU' AND b.id_kategori = 6
-            GROUP BY a.id_produk");
-            $all = '';
+            $all = $this->getAllQuery($tgl1, $tgl2, 'SOONDOBU');
         } else {
-            $jenis = '';
-            $all = DB::select("SELECT a.*, SUM(a.total) as total,sum(a.jumlah) as jumlah, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
-            LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
-            LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
-            LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
-            WHERE a.tanggal BETWEEN '$tgl1' AND '$tgl2' AND a.void = 0
-            GROUP BY a.id_produk");
-            $takemori = '';
-            $soondobu = '';
+            $takemori = $this->getAllQuery($tgl1, $tgl2, 'TAKEMORI', $jenis);
+            $soondobu = $this->getAllQuery($tgl1, $tgl2, 'SOONDOBU', $jenis);
         }
 
         $data = [
