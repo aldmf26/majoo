@@ -85,7 +85,7 @@ class LaporanController extends Controller
             $jenis = 'sdb';
             $takemori = '';
             $soondobu = '';
-            $all = DB::select("SELECT a.*, SUM(a.total) as total, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
+            $all = DB::select("SELECT a.*, SUM(a.total) as total,sum(a.jumlah) as jumlah, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
             LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
             LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
             LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
@@ -93,14 +93,14 @@ class LaporanController extends Controller
             GROUP BY a.id_produk");
         } elseif ($jenis == 'orc') {
             $jenis = 'orc';
-            $takemori = DB::select("SELECT a.*, SUM(a.total) as total, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
+            $takemori = DB::select("SELECT a.*, SUM(a.total) as total,sum(a.jumlah) as jumlah, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
             LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
             LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
             LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
             WHERE a.tanggal BETWEEN '$tgl1' AND '$tgl2' AND a.void = 0 AND a.lokasi = 'TAKEMORI' AND b.id_kategori = 6
             GROUP BY a.id_produk");
 
-            $soondobu = DB::select("SELECT a.*, SUM(a.total) as total, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
+            $soondobu = DB::select("SELECT a.*, SUM(a.total) as total,sum(a.jumlah) as jumlah, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
             LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
             LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
             LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
@@ -109,7 +109,7 @@ class LaporanController extends Controller
             $all = '';
         } else {
             $jenis = '';
-            $all = DB::select("SELECT a.*, SUM(a.total) as total, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
+            $all = DB::select("SELECT a.*, SUM(a.total) as total,sum(a.jumlah) as jumlah, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
             LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
             LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
             LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
