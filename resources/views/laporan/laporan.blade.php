@@ -27,11 +27,11 @@
                                 <button type="button" class="btn btn-sm btn-costume float-right ml-2" data-toggle="modal"
                                     data-target="#excel"><i class="fas fa-file-excel text-light"></i> Excel</button>
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a class="nav-link {{ $jenis == '' ? 'active' : '' }}" id="all-tab"
                                             href="<?= route('laporan') ?>" role="tab" aria-controls="all"
                                             aria-selected="true">All</a>
-                                    </li>
+                                    </li> --}}
                                     <li class="nav-item">
                                         <a class="nav-link {{ $jenis == 'tkm' ? 'active' : '' }}" id="tkmr-tab"
                                             href="<?= route('laporan', ['jenis' => 'tkm', 'tgl1' => $tgl1, 'tgl2' => $tgl2]) ?>"
