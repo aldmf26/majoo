@@ -66,7 +66,7 @@
                                             <h5><strong>Laporan {{ $jenis == '6' ? 'Orchad' : 'Upperclass Birdnest' }}
                                                     <?= $tgl1 ?> - <?= $tgl2 ?></strong> (Dijual di
                                                 Takemori)</h5>
-                                            <table class="table">
+                                            <table class="table table">
                                                 <thead>
                                                     <tr>
                                                         <th>KATEGORI</th>
@@ -149,7 +149,9 @@
                                         @else
                                             <h5><strong>Laporan penjualan Takemori, Soondobu, Orchard <?= $tgl1 ?> -
                                                     <?= $tgl2 ?></strong></h5>
-                                            <table class="table">
+                                            <input type="text" class="form-control" placeholder="pencarian.."
+                                                id="pencarian">
+                                            <table class="table" id="tblALdi">
                                                 <thead>
                                                     <tr>
                                                         <th>KATEGORI</th>
@@ -308,4 +310,18 @@
         </div>
         </div>
     </form>
+    @section('script')
+        <script>
+            pencarian('pencarian', 'tblALdi')
+    
+            function pencarian(inputId, tblId) {
+                $(document).on('keyup', "#" + inputId, function() {
+                    var value = $(this).val().toLowerCase();
+                    $(`#${tblId} tbody tr`).filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                })
+            }
+        </script>
+    @endsection
 @endsection
