@@ -274,17 +274,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <input type="hidden" name="jenis" value="{{ $jenis }}">
+                            <input type="hidden" name="jenis" value="{{ $jenis == 11 ? 'birdnest' : $jenis }}">
                             <div class="col-12 col-md-4">
                                 <div class="form-group">
                                     <label>Dari</label>
-                                    <input required class="form-control" type="date" value="" name="tgl1">
+                                    <input value="{{ $tgl1 }}" required class="form-control" type="date" value="" name="tgl1">
                                 </div>
                             </div>
                             <div class="col-12 col-md-4">
                                 <div class="form-group">
                                     <label>Sampai</label>
-                                    <input required class="form-control" type="date" value="" name="tgl2">
+                                    <input value="{{ $tgl2 }}" required class="form-control" type="date" value="" name="tgl2">
                                 </div>
                             </div>
                             <div class="col-12 col-md-4">

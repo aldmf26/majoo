@@ -97,11 +97,19 @@ class LaporanController extends Controller
             $all = $this->getAllQuery($tgl1, $tgl2, 'TAKEMORI');
         } elseif ($jenis == 'sdb') {
             $all = $this->getAllQuery($tgl1, $tgl2, 'SOONDOBU');
-        } else {
+        } elseif($jenis == 'birdnest') {
+            $all = DB::select("SELECT a.*, SUM(a.jumlah) as jlh, SUM(a.total) as total, AVG(a.harga) as rt_harga, b.*,c.*,d.* FROM `tb_pembelian` as a
+            LEFT JOIN tb_produk as b ON a.id_produk = b.id_produk
+            LEFT JOIN tb_kategori as c ON b.id_kategori = c.id_kategori
+            LEFT JOIN tb_satuan as d ON b.id_satuan = d.id_satuan
+            WHERE a.tanggal BETWEEN '$tgl1' AND '$tgl2' AND a.void = 0 AND b.id_kategori = 11
+            GROUP BY a.id_produk");
+        }
+        else {
             $takemori = $this->getAllQuery($tgl1, $tgl2, 'TAKEMORI', $jenis);
             $soondobu = $this->getAllQuery($tgl1, $tgl2, 'SOONDOBU', $jenis);
         }
-
+        
         $data = [
             'title' => "Laporan Penjualan",
             'penjualan' => $all,
