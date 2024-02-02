@@ -38,16 +38,16 @@ header("Content-Disposition: attachment; filename=$file");
             <tr>
                 <td><?= $k->nm_kategori ?></td>
                 <td><?= $k->nm_produk ?></td>
-                <td><?= number_format($k->jumlah, 0) ?></td>
+                <td><?= $k->jumlah ?></td>
                 <td><?= $k->satuan ?></td>
-                <td><?= number_format($k->total, 0) ?></td>
+                <td><?= $k->total ?></td>
             </tr>
             <?php endforeach ?>
         </tbody>
         <tfoot class="bg-secondary text-light">
             <tr>
                 <th colspan="5">TOTAL</th>
-                <th><?= number_format($ttl_tkmr, 0) ?></th>
+                <th><?= $ttl_tkmr ?></th>
             </tr>
         </tfoot>
     </table>
@@ -77,22 +77,22 @@ header("Content-Disposition: attachment; filename=$file");
             <tr>
                 <td><?= $k->nm_kategori ?></td>
                 <td><?= $k->nm_produk ?></td>
-                <td><?= number_format($k->jumlah, 0) ?></td>
+                <td><?= $k->jumlah ?></td>
                 <td><?= $k->satuan ?></td>
-                <td><?= number_format($k->total, 0) ?></td>
+                <td><?= $k->total ?></td>
             </tr>
             <?php endforeach ?>
         </tbody>
         <tfoot class="bg-secondary text-light">
             <tr>
                 <th colspan="5">TOTAL</th>
-                <th><?= number_format($ttl_sdb, 0) ?></th>
+                <th><?= $ttl_sdb ?></th>
             </tr>
         </tfoot>
         <tfoot class="bg-secondary text-light">
             <tr>
                 <th colspan="5">TOTAL</th>
-                <th><?= number_format($ttl_tkmr + $ttl_sdb, 0) ?></th>
+                <th><?= $ttl_tkmr + $ttl_sdb ?></th>
             </tr>
         </tfoot>
     </table>
@@ -123,25 +123,25 @@ header("Content-Disposition: attachment; filename=$file");
             <tr>
                 <td><?= $k->nm_kategori ?></td>
                 <td><?= $k->nm_produk ?></td>
-                <td><?= number_format($k->jlh, 0) ?></td>
+                <td><?= $k->jlh ?></td>
                 <td><?= $k->satuan ?></td>
-                <td><?= number_format($k->rt_harga, 0) ?></td>
-                <td><?= number_format($k->total, 0) ?></td>
+                <td><?= $k->rt_harga ?></td>
+                <td><?= $k->total ?></td>
             </tr>
             <?php endforeach ?>
         </tbody>
         <tfoot class="bg-secondary text-light">
             <tr>
                 <th colspan="5">TOTAL TS</th>
-                <th><?= number_format($ttl - $ttl_orchard, 0) ?></th>
+                <th><?= $ttl - $ttl_orchard ?></th>
             </tr>
             <tr>
                 <th colspan="5">TOTAL Orchard</th>
-                <th><?= number_format($ttl_orchard, 0) ?></th>
+                <th><?= $ttl_orchard ?></th>
             </tr>
             <tr>
                 <th colspan="5">TOTAL</th>
-                <th><?= number_format($ttl, 0) ?></th>
+                <th><?= $ttl ?></th>
             </tr>
         </tfoot>
     </table>
