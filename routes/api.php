@@ -35,4 +35,4 @@ Route::get('komisiGaji/{lokasi}/{nama}/{tgl1}/{tgl2}', [ProdukController::class,
 Route::get('add_karyawan/{nama}', [ProdukController::class, 'add_karyawan'])->middleware('api_key');
 
 Route::get('laporan/{lokasi}/{tgl1}/{tgl2}', [ProdukController::class, 'laporan']);
-
+Route::get('LaporanHarian/{lokasi}/{tgl1}/{tgl2}', [ProdukController::class, 'LaporanHarian']);

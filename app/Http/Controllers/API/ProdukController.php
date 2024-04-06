@@ -38,7 +38,7 @@ class ProdukController extends Controller
             $tgl1 = $tgl1;
             $tgl2 = $tgl2;
         }
-        
+
         $komisi = DB::select("SELECT SUM(b.harga) as komisi_penjualan,a.id, b.no_nota, c.nm_karyawan, sum(a.komisi) AS dt_komisi, b.lokasi, d.id_kategori, e.nm_kategori,
         if(d.id_kategori = '6' , e.nm_kategori, b.lokasi) AS lokasi2
         FROM komisi AS a
@@ -86,7 +86,7 @@ class ProdukController extends Controller
         ];
         return response()->json($data);
     }
-    
+
     public function komisiGaji($lokasi, $nama, $tgl1, $tgl2)
     {
         $lokasi = $lokasi == 1 ? 'TAKEMORI' : 'SOONDOBU';
@@ -123,7 +123,7 @@ class ProdukController extends Controller
         ];
         return response()->json($data);
     }
-    public function penjualn_server($lokasi,$tgl1, $tgl2)
+    public function penjualn_server($lokasi, $tgl1, $tgl2)
     {
         $komisi = DB::select("SELECT b.nm_produk, sum(a.jumlah) as jumlah, b.komisi, sum(a.total) as total, a.lokasi 
         FROM tb_pembelian as a 
@@ -137,7 +137,7 @@ class ProdukController extends Controller
         ];
         return response()->json($data);
     }
-    
+
     public function laporan($lokasi, $tgl1, $tgl2)
     {
         $data = [
@@ -152,7 +152,7 @@ class ProdukController extends Controller
         ];
         return response()->json($data);
     }
-    
+
     public function add_karyawan($nama)
     {
         $data = [
@@ -160,8 +160,14 @@ class ProdukController extends Controller
             'posisi' => 'WAITRESS',
             'pangkat' => 'SERVER',
             'tgl_join' => date('Y-m-d'),
-          ];
+        ];
         Karyawan::create($data);
     }
 
+    public function LaporanHarian($lokasi, $tgl1, $tgl2)
+    {
+        $harian =  DB::select("SELECT a.tgl, a.no_nota, c.nm_akun, b.bayar, a.nominal FROM pembayaran as a left join akun_pembayaran as c on c.id_akun_pembayaran = a.id_akun_pembayaran left join tb_invoice as b on b.no_nota = a.no_nota where b.lokasi ='$lokasi' and a.tgl BETWEEN '$tgl1' and '$tgl2';");
+
+        return response()->json($harian);
+    }
 }
